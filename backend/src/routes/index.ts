@@ -6,6 +6,7 @@ import {
   departmentsRouter,
   countriesRouter,
 } from '../modules/employees/employees.router';
+import salariesRouter from '../modules/salaries/salaries.router';
 import { requireAuth } from '../middleware/auth';
 
 const router = Router();
@@ -19,6 +20,7 @@ router.use('/auth', authRouter);
 router.use('/employees', employeesRouter);
 router.use('/departments', departmentsRouter);
 router.use('/countries', countriesRouter);
+router.use('/', salariesRouter);
 
 // Temporary test route to verify auth middleware
 router.get('/test-protected', requireAuth, (req, res) => {
