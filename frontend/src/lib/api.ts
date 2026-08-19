@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useAuthStore } from '../store/auth';
+import { decodeToken } from './jwt';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1',
@@ -43,8 +44,13 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // Never intercept or retry the refresh-token request itself
-    if (originalRequest.url && originalRequest.url.includes('/auth/refresh')) {
+    // Never intercept or retry authentication requests themselves
+    if (
+      originalRequest.url &&
+      (originalRequest.url.includes('/auth/login') ||
+        originalRequest.url.includes('/auth/refresh') ||
+        originalRequest.url.includes('/auth/logout'))
+    ) {
       return Promise.reject(error);
     }
 
@@ -78,7 +84,18 @@ api.interceptors.response.use(
         { withCredentials: true }
       );
 
-      const { accessToken, user } = res.data.data;
+      const { accessToken } = res.data.data;
+      const currentUser = useAuthStore.getState().user;
+
+      // Preserve active user state, or decode from the fresh JWT
+      const decoded = decodeToken(accessToken);
+      const user = currentUser || (decoded ? {
+        id: decoded.userId,
+        role: decoded.role,
+        name: decoded.role === 'hr_manager' ? 'HR Manager' : 'HR Staff',
+        email: '',
+      } : null);
+
       useAuthStore.getState().setAuth(accessToken, user);
 
       processQueue(null, accessToken);

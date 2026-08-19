@@ -11,6 +11,7 @@ const envSchema = z.object({
     .url('TEST_DATABASE_URL must be a valid PostgreSQL connection string')
     .optional(),
   JWT_SECRET: z.string().min(8).default('supersecret_jwt_key_for_development'),
+  FRONTEND_URL: z.string().url('FRONTEND_URL must be a valid URL').optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);

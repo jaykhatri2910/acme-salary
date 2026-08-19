@@ -25,7 +25,7 @@ const loginSchema = z.object({
 type LoginFields = z.infer<typeof loginSchema>;
 
 export const Login: React.FC = () => {
-  const { setAuth } = useAuthStore();
+  const { setAuth, accessToken, user } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
   const [apiError, setApiError] = React.useState<string | null>(null);
@@ -40,6 +40,12 @@ export const Login: React.FC = () => {
   });
 
   const from = location.state?.from?.pathname || '/';
+
+  React.useEffect(() => {
+    if (accessToken && user) {
+      navigate(from, { replace: true });
+    }
+  }, [accessToken, user, navigate, from]);
 
   const onSubmit = async (data: LoginFields) => {
     setApiError(null);

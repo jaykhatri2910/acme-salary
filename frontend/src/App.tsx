@@ -1,14 +1,35 @@
 import * as React from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, Link, useLocation } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuthStore } from './store/auth';
 import api from './lib/api';
+import { decodeToken } from './lib/jwt';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { Login } from './pages/Login';
+import { Employees } from './pages/Employees';
+import { EmployeeDetail } from './pages/EmployeeDetail';
+import { Users, LogOut, LayoutDashboard } from 'lucide-react';
 
-// Placeholder Page for Dashboard
+const queryClient = new QueryClient();
+
+// Header Layout Wrapper
 const DashboardPlaceholder = () => {
+  return (
+    <div className="flex-1 flex items-center justify-center border border-dashed border-border rounded-lg p-12">
+      <div className="text-center space-y-2">
+        <h2 className="text-lg font-semibold">Dashboard Page</h2>
+        <p className="text-sm text-muted-foreground text-left">
+          Analytics dashboard and visualizations placeholder.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, clearAuth } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = async () => {
     try {
@@ -21,61 +42,101 @@ const DashboardPlaceholder = () => {
     }
   };
 
+  const navItems = [
+    { name: 'Dashboard', path: '/', icon: LayoutDashboard },
+    { name: 'Employees', path: '/employees', icon: Users },
+  ];
+
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground p-8">
-      <header className="flex justify-between items-center border-b border-border pb-4 mb-8">
-        <h1 className="text-xl font-bold tracking-tight">ACME Salary</h1>
-        <div className="flex items-center space-x-4">
-          <span className="text-sm text-muted-foreground">
-            Welcome, {user?.name} ({user?.role})
-          </span>
-          <button
-            onClick={handleLogout}
-            className="text-sm font-medium text-destructive hover:underline cursor-pointer"
-          >
-            Logout
-          </button>
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
+      {/* Premium Header */}
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-slate-950/80 backdrop-blur-md">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center space-x-8">
+            <Link to="/" className="flex items-center space-x-2 outline-none">
+              <span className="text-lg font-bold bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
+                ACME Salary
+              </span>
+            </Link>
+
+            <nav className="flex space-x-1">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive =
+                  item.path === '/'
+                    ? location.pathname === '/'
+                    : location.pathname.startsWith(item.path);
+
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`inline-flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring ${
+                      isActive
+                        ? 'bg-slate-900 text-slate-100'
+                        : 'text-muted-foreground hover:bg-slate-900/50 hover:text-slate-200'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{item.name}</span>
+                  </Link>
+                );
+              })}
+            </nav>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <div className="hidden sm:flex flex-col text-right">
+              <span className="text-sm font-semibold text-slate-200">{user?.name}</span>
+              <span className="text-xs text-muted-foreground capitalize">
+                {user?.role.replace('_', ' ')}
+              </span>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-input bg-transparent hover:bg-rose-950/20 hover:text-rose-400 transition-colors outline-none cursor-pointer"
+              aria-label="Logout"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </header>
-      <main className="flex-1 flex items-center justify-center border border-dashed border-border rounded-lg p-12">
-        <div className="text-center space-y-2">
-          <h2 className="text-lg font-semibold">Dashboard Page</h2>
-          <p className="text-sm text-muted-foreground">
-            Analytics dashboard and visualizations placeholder.
-          </p>
-        </div>
+
+      {/* Main content body */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full flex flex-col">
+        {children}
       </main>
     </div>
   );
 };
-
-// Placeholder Page for Employees
-const EmployeesPlaceholder = () => (
-  <div className="flex min-h-screen flex-col bg-background text-foreground p-8">
-    <h1 className="text-xl font-bold tracking-tight mb-8">Employees List</h1>
-    <div className="border border-dashed border-border rounded-lg p-12 text-center">
-      <h2 className="text-lg font-semibold">Employees Management</h2>
-      <p className="text-sm text-muted-foreground">
-        List, search, filter, and pagination placeholder.
-      </p>
-    </div>
-  </div>
-);
 
 const AppContent: React.FC = () => {
   const { setAuth, setInitialized } = useAuthStore();
   const navigate = useNavigate();
 
   React.useEffect(() => {
+    let cancelled = false;
+
     const performSilentRefresh = async () => {
       try {
         const res = await api.post('/auth/refresh');
-        const { accessToken, user } = res.data.data;
+        if (cancelled) return;
+        const { accessToken } = res.data.data;
+        const decoded = decodeToken(accessToken);
+        const user = decoded
+          ? {
+              id: decoded.userId,
+              role: decoded.role,
+              name: decoded.role === 'hr_manager' ? 'HR Manager' : 'HR Staff',
+              email: '',
+            }
+          : null;
         setAuth(accessToken, user);
       } catch {
-        // Non-logged in users should not fail the app initialization
+        // Unauthenticated initial user is fine
       } finally {
-        setInitialized(true);
+        if (!cancelled) setInitialized(true);
       }
     };
 
@@ -86,10 +147,13 @@ const AppContent: React.FC = () => {
     };
 
     window.addEventListener('auth-session-expired', handleSessionExpired);
+
     return () => {
+      cancelled = true;
       window.removeEventListener('auth-session-expired', handleSessionExpired);
     };
   }, [setAuth, setInitialized, navigate]);
+
 
   return (
     <Routes>
@@ -98,7 +162,9 @@ const AppContent: React.FC = () => {
         path="/"
         element={
           <ProtectedRoute>
-            <DashboardPlaceholder />
+            <MainLayout>
+              <DashboardPlaceholder />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
@@ -106,7 +172,19 @@ const AppContent: React.FC = () => {
         path="/employees"
         element={
           <ProtectedRoute>
-            <EmployeesPlaceholder />
+            <MainLayout>
+              <Employees />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/employees/:id"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <EmployeeDetail />
+            </MainLayout>
           </ProtectedRoute>
         }
       />
@@ -117,9 +195,11 @@ const AppContent: React.FC = () => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 

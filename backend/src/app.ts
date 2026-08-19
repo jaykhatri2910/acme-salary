@@ -1,13 +1,37 @@
 import express from 'express';
+import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import pinoHttp from 'pino-http';
 import { logger } from './config/logger';
+import { env } from './config/env';
 import { healthRouter } from './routes/index';
 import apiRouter from './routes/index';
 import { notFound } from './middleware/notFound';
 import { errorHandler } from './middleware/errorHandler';
 
 const app = express();
+
+// ── CORS Configuration ────────────────────────────────────────────────────────
+const allowedOrigins = ['http://localhost:5173'];
+if (env.FRONTEND_URL) {
+  allowedOrigins.push(env.FRONTEND_URL);
+}
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow server-to-server or test requests with no origin
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(null, false);
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  }),
+);
 
 // ── Request logging ───────────────────────────────────────────────────────────
 app.use(

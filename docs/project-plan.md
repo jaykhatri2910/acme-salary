@@ -321,6 +321,7 @@ Node.js must not load the complete salary dataset into memory for aggregation.
 **Owner:** Frontend developer
 **Starts after:** Phase 2 and API contract finalization
 **Duration:** ~1 day
+**Status:** COMPLETE ✅
 
 From this phase onward, frontend integration uses the real backend API.
 
@@ -352,6 +353,7 @@ Any API mismatch must be treated as an API contract amendment rather than being 
 **Owner:** Frontend developer
 **Starts after:** Phase 3
 **Duration:** ~2 days
+**Status:** COMPLETE ✅
 
 | Task  | Detail                                                    |
 | ----- | --------------------------------------------------------- |
