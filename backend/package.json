@@ -14,7 +14,7 @@
     "lint:fix": "eslint 'src/**/*.ts' --fix",
     "format": "prettier --write 'src/**/*.ts'",
     "typecheck": "tsc --noEmit",
-    "test": "jest",
+    "test": "jest --runInBand",
     "test:coverage": "jest --coverage",
     "migrate": "node-pg-migrate up --migrations-dir src/db/migrations",
     "migrate:down": "node-pg-migrate down --migrations-dir src/db/migrations",
