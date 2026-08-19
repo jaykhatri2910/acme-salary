@@ -218,6 +218,7 @@ Verify:
 
 **Owner:** Backend developer
 **Duration:** ~2 days
+**Status:** COMPLETE ✅
 
 | Task | Detail                                                                                    |
 | ---- | ----------------------------------------------------------------------------------------- |
@@ -275,6 +276,7 @@ History responses must expose sufficient information to show:
 
 **Owner:** Backend developer
 **Duration:** ~1–2 days
+**Status:** COMPLETE ✅
 
 | Task | Detail                                               |
 | ---- | ---------------------------------------------------- |
