@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Compiled output
+dist/
+
+# Environment variables (never commit)
+.env
+
+# Test coverage
+coverage/
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
