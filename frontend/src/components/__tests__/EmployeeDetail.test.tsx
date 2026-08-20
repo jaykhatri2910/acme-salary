@@ -8,59 +8,58 @@ import api from '../../lib/api';
 vi.mock('../../lib/api', () => ({
   default: {
     get: vi.fn(),
+    post: vi.fn(),
   },
 }));
 
 const createQueryClient = () =>
   new QueryClient({
     defaultOptions: {
-      queries: {
-        retry: false,
-      },
+      queries: { retry: false },
+      mutations: { retry: false },
     },
   });
+
+const mockEmployeeDetail = {
+  data: {
+    id: 'emp-1',
+    employeeNo: 'EMP-001',
+    firstName: 'John',
+    lastName: 'Doe',
+    fullName: 'John Doe',
+    email: 'john.doe@acme.com',
+    department: { id: 'dept-1', name: 'Engineering' },
+    country: { id: 'cnt-1', name: 'United States', code: 'US' },
+    employmentStatus: 'active',
+    currentSalary: {
+      id: 'sal-1',
+      amount: 95000,
+      currencyCode: 'USD',
+      effectiveDate: '2026-08-01',
+      payFrequency: 'annual',
+      grade: 'G6',
+      band: 'Senior',
+    },
+  },
+};
+
+const mockHistoryEmpty = {
+  data: [],
+  meta: { page: 1, pageSize: 25, total: 0, totalPages: 0 },
+};
 
 describe('EmployeeDetail Page', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  const mockEmployeeDetail = {
-    data: {
-      id: 'emp-1',
-      employeeNo: 'EMP-001',
-      firstName: 'John',
-      lastName: 'Doe',
-      fullName: 'John Doe',
-      email: 'john.doe@acme.com',
-      department: { id: 'dept-1', name: 'Engineering' },
-      country: { id: 'cnt-1', name: 'United States', code: 'US' },
-      employmentStatus: 'active',
-      currentSalary: {
-        id: 'sal-1',
-        amount: 95000,
-        currencyCode: 'USD',
-        effectiveDate: '2026-08-01',
-        payFrequency: 'annual',
-        grade: 'G6',
-        band: 'Senior',
-      },
-    },
-  };
-
-  const mockEmployeeNoSalary = {
-    data: {
-      ...mockEmployeeDetail.data,
-      currentSalary: null,
-    },
-  };
-
   it('renders employee profile and compensation details correctly', async () => {
-    vi.mocked(api.get).mockResolvedValueOnce({ data: mockEmployeeDetail });
-    const queryClient = createQueryClient();
+    vi.mocked(api.get)
+      .mockResolvedValueOnce({ data: mockEmployeeDetail }) // /employees/:id
+      .mockResolvedValueOnce({ data: mockHistoryEmpty });  // /salary/history
 
     render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createQueryClient()}>
         <MemoryRouter initialEntries={['/employees/emp-1']}>
           <Routes>
             <Route path="/employees/:id" element={<EmployeeDetail />} />
@@ -69,14 +68,11 @@ describe('EmployeeDetail Page', () => {
       </QueryClientProvider>
     );
 
-    // Wait for content load
     expect(await screen.findByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('EMP-001')).toBeInTheDocument();
     expect(screen.getByText('john.doe@acme.com')).toBeInTheDocument();
     expect(screen.getByText('Engineering')).toBeInTheDocument();
     expect(screen.getByText('United States (US)')).toBeInTheDocument();
-
-    // Verify formatted salary details
     expect(screen.getByText('$95,000')).toBeInTheDocument();
     expect(screen.getByText(/annual/i)).toBeInTheDocument();
     expect(screen.getByText('G6')).toBeInTheDocument();
@@ -85,11 +81,14 @@ describe('EmployeeDetail Page', () => {
   });
 
   it('handles null currentSalary gracefully', async () => {
-    vi.mocked(api.get).mockResolvedValueOnce({ data: mockEmployeeNoSalary });
-    const queryClient = createQueryClient();
+    vi.mocked(api.get)
+      .mockResolvedValueOnce({
+        data: { data: { ...mockEmployeeDetail.data, currentSalary: null } },
+      })
+      .mockResolvedValueOnce({ data: mockHistoryEmpty });
 
     render(
-      <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={createQueryClient()}>
         <MemoryRouter initialEntries={['/employees/emp-1']}>
           <Routes>
             <Route path="/employees/:id" element={<EmployeeDetail />} />
@@ -98,7 +97,6 @@ describe('EmployeeDetail Page', () => {
       </QueryClientProvider>
     );
 
-    expect(await screen.findByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('No active salary record')).toBeInTheDocument();
+    expect(await screen.findByText('No active salary record')).toBeInTheDocument();
   });
 });

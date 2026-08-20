@@ -136,6 +136,7 @@ export const Employees: React.FC = () => {
 
             {/* Department Filter */}
             <Select
+              aria-label="Filter by department"
               value={department}
               onChange={(e) => handleFilterChange('department', e.target.value)}
             >
@@ -149,6 +150,7 @@ export const Employees: React.FC = () => {
 
             {/* Country Filter */}
             <Select
+              aria-label="Filter by country"
               value={country}
               onChange={(e) => handleFilterChange('country', e.target.value)}
             >
@@ -162,6 +164,7 @@ export const Employees: React.FC = () => {
 
             {/* Status Filter */}
             <Select
+              aria-label="Filter by status"
               value={status}
               onChange={(e) => handleFilterChange('status', e.target.value)}
             >
@@ -172,6 +175,7 @@ export const Employees: React.FC = () => {
 
             {/* Page Size Filter */}
             <Select
+              aria-label="Items per page"
               value={String(pageSize)}
               onChange={(e) => handleFilterChange('pageSize', e.target.value)}
             >

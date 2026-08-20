@@ -8,23 +8,10 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { Login } from './pages/Login';
 import { Employees } from './pages/Employees';
 import { EmployeeDetail } from './pages/EmployeeDetail';
+import { Dashboard } from './pages/Dashboard';
 import { Users, LogOut, LayoutDashboard } from 'lucide-react';
 
 const queryClient = new QueryClient();
-
-// Header Layout Wrapper
-const DashboardPlaceholder = () => {
-  return (
-    <div className="flex-1 flex items-center justify-center border border-dashed border-border rounded-lg p-12">
-      <div className="text-center space-y-2">
-        <h2 className="text-lg font-semibold">Dashboard Page</h2>
-        <p className="text-sm text-muted-foreground text-left">
-          Analytics dashboard and visualizations placeholder.
-        </p>
-      </div>
-    </div>
-  );
-};
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, clearAuth } = useAuthStore();
@@ -163,7 +150,7 @@ const AppContent: React.FC = () => {
         element={
           <ProtectedRoute>
             <MainLayout>
-              <DashboardPlaceholder />
+              <Dashboard />
             </MainLayout>
           </ProtectedRoute>
         }
