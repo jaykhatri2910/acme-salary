@@ -193,7 +193,7 @@ export const Employees: React.FC = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-border bg-slate-900/50">
+              <tr className="border-b border-border bg-muted/40">
                 <th className="p-4 text-sm font-semibold text-muted-foreground">ID</th>
                 <th
                   onClick={() => handleSortChange('name')}
@@ -251,12 +251,12 @@ export const Employees: React.FC = () => {
                 // Initial Loading skeletons
                 Array.from({ length: 5 }).map((_, idx) => (
                   <tr key={idx} className="border-b border-border animate-pulse">
-                    <td className="p-4"><div className="h-4 w-16 bg-slate-800 rounded" /></td>
-                    <td className="p-4"><div className="h-4 w-32 bg-slate-800 rounded" /></td>
-                    <td className="p-4"><div className="h-4 w-24 bg-slate-800 rounded" /></td>
-                    <td className="p-4"><div className="h-4 w-20 bg-slate-800 rounded" /></td>
-                    <td className="p-4"><div className="h-5 w-12 bg-slate-800 rounded-full" /></td>
-                    <td className="p-4"><div className="h-4 w-40 bg-slate-800 rounded" /></td>
+                    <td className="p-4"><div className="h-4 w-16 bg-muted rounded" /></td>
+                    <td className="p-4"><div className="h-4 w-32 bg-muted rounded" /></td>
+                    <td className="p-4"><div className="h-4 w-24 bg-muted rounded" /></td>
+                    <td className="p-4"><div className="h-4 w-20 bg-muted rounded" /></td>
+                    <td className="p-4"><div className="h-5 w-12 bg-muted rounded-full" /></td>
+                    <td className="p-4"><div className="h-4 w-40 bg-muted rounded" /></td>
                   </tr>
                 ))
               ) : data && data.data.length === 0 ? (
@@ -264,7 +264,7 @@ export const Employees: React.FC = () => {
                 <tr>
                   <td colSpan={6} className="p-12 text-center text-muted-foreground">
                     <div className="flex flex-col items-center justify-center space-y-2">
-                      <Inbox className="h-10 w-10 text-slate-700" />
+                      <Inbox className="h-10 w-10 text-muted-foreground/60" />
                       <span className="font-semibold text-sm">No employees found</span>
                       <span className="text-xs">Try adjusting your filters or search terms.</span>
                     </div>
@@ -285,32 +285,32 @@ export const Employees: React.FC = () => {
                     tabIndex={0}
                     role="button"
                     aria-label={`View details for ${emp.fullName}`}
-                    className="border-b border-border hover:bg-slate-900/50 cursor-pointer transition-colors outline-none focus:bg-slate-900/80"
+                    className="border-b border-border hover:bg-muted/40 cursor-pointer transition-colors outline-none focus:bg-muted/60"
                   >
-                    <td className="p-4 text-sm font-medium font-mono text-slate-400">
+                    <td className="p-4 text-sm font-medium font-mono text-muted-foreground">
                       {emp.employeeNo}
                     </td>
                     <td className="p-4 text-sm font-semibold text-foreground">
                       {emp.fullName}
                     </td>
-                    <td className="p-4 text-sm text-slate-300">
+                    <td className="p-4 text-sm text-foreground/80">
                       {emp.department.name}
                     </td>
-                    <td className="p-4 text-sm text-slate-300">
+                    <td className="p-4 text-sm text-foreground/80">
                       {emp.country.name}
                     </td>
                     <td className="p-4 text-sm">
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold ${
                           emp.employmentStatus === 'active'
-                            ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/25'
-                            : 'bg-rose-500/10 text-rose-400 border border-rose-500/25'
+                            ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25'
+                            : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/25'
                         }`}
                       >
                         {emp.employmentStatus}
                       </span>
                     </td>
-                    <td className="p-4 text-sm text-slate-200">
+                    <td className="p-4 text-sm text-foreground font-medium">
                       {formatSalary(emp.currentSalary)}
                     </td>
                   </tr>
@@ -322,7 +322,7 @@ export const Employees: React.FC = () => {
 
         {/* Pagination Panel */}
         {data && data.meta.totalPages > 0 ? (
-          <div className="flex flex-col space-y-4 p-4 border-t border-border sm:flex-row sm:items-center sm:justify-between sm:space-y-0 bg-slate-900/30">
+          <div className="flex flex-col space-y-4 p-4 border-t border-border sm:flex-row sm:items-center sm:justify-between sm:space-y-0 bg-muted/20">
             <span className="text-sm text-muted-foreground text-left">
               Showing page <span className="font-semibold text-foreground">{data.meta.page}</span> of{' '}
               <span className="font-semibold text-foreground">{data.meta.totalPages}</span> (
@@ -333,7 +333,7 @@ export const Employees: React.FC = () => {
               <button
                 disabled={data.meta.page <= 1}
                 onClick={() => handlePageChange(data.meta.page - 1)}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-card shadow-sm hover:bg-accent disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-card shadow-xs hover:bg-accent disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
                 aria-label="Previous page"
               >
                 <ChevronLeft className="h-4 w-4" />
@@ -355,7 +355,7 @@ export const Employees: React.FC = () => {
                     onClick={() => handlePageChange(targetPage)}
                     className={`inline-flex h-8 w-8 items-center justify-center rounded-md text-sm font-medium border transition-colors cursor-pointer ${
                       data.meta.page === targetPage
-                        ? 'bg-slate-800 text-foreground border-slate-700'
+                        ? 'bg-primary text-primary-foreground border-primary'
                         : 'border-input bg-card hover:bg-accent'
                     }`}
                   >

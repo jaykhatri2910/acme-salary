@@ -17,6 +17,8 @@ import {
   CardContent,
 } from '../components/ui/card';
 
+import { ThemeToggle } from '../components/ThemeToggle';
+
 const loginSchema = z.object({
   email: z.string().min(1, 'Email is required').email('Invalid email address'),
   password: z.string().min(1, 'Password is required'),
@@ -66,8 +68,11 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <Card className="w-full max-w-md border-border bg-card">
+    <div className="relative flex min-h-screen items-center justify-center bg-background px-4 transition-colors duration-200">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
+      <Card className="w-full max-w-md border-border bg-card shadow-lg">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold tracking-tight">Sign in</CardTitle>
           <CardDescription className="text-muted-foreground text-sm">

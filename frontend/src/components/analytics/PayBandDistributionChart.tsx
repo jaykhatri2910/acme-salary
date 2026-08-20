@@ -20,18 +20,18 @@ export const PayBandDistributionChart: React.FC<PayBandDistributionChartProps> =
       <Card className="border-border bg-card text-left" data-testid="pay-band-skeleton">
         <CardHeader className="border-b border-border pb-4">
           <div className="flex items-center justify-between">
-            <div className="h-5 w-44 bg-slate-800 rounded animate-pulse" />
-            <div className="h-4 w-16 bg-slate-800 rounded animate-pulse" />
+            <div className="h-5 w-44 bg-muted rounded animate-pulse" />
+            <div className="h-4 w-16 bg-muted rounded animate-pulse" />
           </div>
         </CardHeader>
         <CardContent className="p-6 space-y-4">
           {Array.from({ length: 4 }).map((_, idx) => (
             <div key={idx} className="space-y-2 animate-pulse">
               <div className="flex justify-between">
-                <div className="h-4 w-20 bg-slate-800 rounded" />
-                <div className="h-4 w-14 bg-slate-800 rounded" />
+                <div className="h-4 w-20 bg-muted rounded" />
+                <div className="h-4 w-14 bg-muted rounded" />
               </div>
-              <div className="h-2.5 w-full bg-slate-800 rounded-full" />
+              <div className="h-2.5 w-full bg-muted rounded-full" />
             </div>
           ))}
         </CardContent>
@@ -54,7 +54,7 @@ export const PayBandDistributionChart: React.FC<PayBandDistributionChartProps> =
       case 'lead':
         return 'from-purple-500 to-pink-500';
       case 'unassigned':
-        return 'from-slate-600 to-slate-500';
+        return 'from-slate-400 to-slate-500 dark:from-slate-600 dark:to-slate-500';
       default:
         return 'from-cyan-500 to-blue-500';
     }
@@ -65,7 +65,7 @@ export const PayBandDistributionChart: React.FC<PayBandDistributionChartProps> =
       <CardHeader className="border-b border-border pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center space-x-2 text-lg">
-            <Layers className="h-5 w-5 text-cyan-400" />
+            <Layers className="h-5 w-5 text-cyan-500 dark:text-cyan-400" />
             <span>Pay Band Distribution</span>
           </CardTitle>
           <span className="text-xs text-muted-foreground font-normal">
@@ -76,7 +76,7 @@ export const PayBandDistributionChart: React.FC<PayBandDistributionChartProps> =
       <CardContent className="p-6">
         {distribution.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 space-y-2 text-center text-muted-foreground">
-            <Inbox className="h-8 w-8 text-slate-700" />
+            <Inbox className="h-8 w-8 text-muted-foreground/60" />
             <p className="font-semibold text-sm">No pay band data</p>
             <p className="text-xs max-w-xs">
               Band allocations will appear when employee data is available.
@@ -94,18 +94,18 @@ export const PayBandDistributionChart: React.FC<PayBandDistributionChartProps> =
                 <div key={item.band ?? `unassigned-${idx}`} className="space-y-1.5">
                   <div className="flex items-center justify-between text-sm">
                     <div className="flex items-center space-x-2">
-                      <span className="font-medium text-slate-200">{bandLabel}</span>
+                      <span className="font-medium text-foreground">{bandLabel}</span>
                       <span className="text-xs text-muted-foreground">
                         ({percent})
                       </span>
                     </div>
-                    <span className="text-xs font-semibold font-mono text-slate-300">
+                    <span className="text-xs font-semibold font-mono text-foreground/80">
                       {formatNumber(count)}
                     </span>
                   </div>
 
                   {/* Proportional bar */}
-                  <div className="h-2 w-full bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                  <div className="h-2 w-full bg-muted rounded-full overflow-hidden border border-border/40">
                     <div
                       className={`h-full bg-gradient-to-r ${getBandGradient(bandLabel)} rounded-full transition-all duration-500`}
                       style={{ width: `${barWidth}%` }}

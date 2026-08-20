@@ -20,18 +20,18 @@ export const CountryBreakdownTable: React.FC<CountryBreakdownTableProps> = ({
       <Card className="border-border bg-card text-left" data-testid="country-breakdown-skeleton">
         <CardHeader className="border-b border-border pb-4">
           <div className="flex items-center justify-between">
-            <div className="h-5 w-44 bg-slate-800 rounded animate-pulse" />
-            <div className="h-4 w-24 bg-slate-800 rounded animate-pulse" />
+            <div className="h-5 w-44 bg-muted rounded animate-pulse" />
+            <div className="h-4 w-24 bg-muted rounded animate-pulse" />
           </div>
         </CardHeader>
         <CardContent className="p-0">
           <div className="divide-y divide-border">
             {Array.from({ length: 4 }).map((_, idx) => (
               <div key={idx} className="p-4 flex items-center justify-between animate-pulse">
-                <div className="h-4 w-32 bg-slate-800 rounded" />
-                <div className="h-4 w-20 bg-slate-800 rounded" />
-                <div className="h-4 w-24 bg-slate-800 rounded" />
-                <div className="h-4 w-24 bg-slate-800 rounded" />
+                <div className="h-4 w-32 bg-muted rounded" />
+                <div className="h-4 w-20 bg-muted rounded" />
+                <div className="h-4 w-24 bg-muted rounded" />
+                <div className="h-4 w-24 bg-muted rounded" />
               </div>
             ))}
           </div>
@@ -45,7 +45,7 @@ export const CountryBreakdownTable: React.FC<CountryBreakdownTableProps> = ({
       <CardHeader className="border-b border-border pb-4">
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center space-x-2 text-lg">
-            <Globe className="h-5 w-5 text-emerald-400" />
+            <Globe className="h-5 w-5 text-emerald-500 dark:text-emerald-400" />
             <span>Regional Compensation Breakdown</span>
           </CardTitle>
           <span className="text-xs text-muted-foreground font-normal">
@@ -56,7 +56,7 @@ export const CountryBreakdownTable: React.FC<CountryBreakdownTableProps> = ({
       <CardContent className="p-0">
         {countries.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 space-y-2 text-center text-muted-foreground">
-            <Inbox className="h-8 w-8 text-slate-700" />
+            <Inbox className="h-8 w-8 text-muted-foreground/60" />
             <p className="font-semibold text-sm">No regional data available</p>
             <p className="text-xs max-w-xs">
               Country compensation statistics will appear here when records match your filter criteria.
@@ -66,7 +66,7 @@ export const CountryBreakdownTable: React.FC<CountryBreakdownTableProps> = ({
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-border bg-slate-900/50">
+                <tr className="border-b border-border bg-muted/40">
                   <th className="p-4 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                     Country
                   </th>
@@ -99,17 +99,17 @@ export const CountryBreakdownTable: React.FC<CountryBreakdownTableProps> = ({
                   return (
                     <tr
                       key={c.countryCode || c.country}
-                      className="hover:bg-slate-900/40 transition-colors"
+                      className="hover:bg-muted/30 transition-colors"
                     >
                       <td className="p-4 text-sm font-semibold text-foreground">
                         <div className="flex items-center space-x-2">
                           <span>{c.country}</span>
-                          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-mono font-medium bg-slate-800 text-slate-300 border border-slate-700">
+                          <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[11px] font-mono font-medium bg-secondary text-secondary-foreground border border-border">
                             {c.countryCode}
                           </span>
                         </div>
                       </td>
-                      <td className="p-4 text-sm text-slate-300">
+                      <td className="p-4 text-sm text-foreground/80">
                         <span className="font-semibold text-foreground font-mono">
                           {formatNumber(headcount)}
                         </span>
@@ -117,16 +117,16 @@ export const CountryBreakdownTable: React.FC<CountryBreakdownTableProps> = ({
                           ({formatPercent(headcount, totalHeadcount)})
                         </span>
                       </td>
-                      <td className="p-4 text-sm text-slate-200 font-semibold font-mono">
+                      <td className="p-4 text-sm text-foreground font-semibold font-mono">
                         {formatUsd(totalPayroll)}
                       </td>
-                      <td className="p-4 text-sm text-emerald-400 font-semibold font-mono">
+                      <td className="p-4 text-sm text-emerald-600 dark:text-emerald-400 font-semibold font-mono">
                         {formatUsd(avgSalary)}
                       </td>
-                      <td className="p-4 text-sm text-violet-300 font-semibold font-mono">
+                      <td className="p-4 text-sm text-violet-600 dark:text-violet-400 font-semibold font-mono">
                         {formatUsd(medianSalary)}
                       </td>
-                      <td className="p-4 text-sm text-slate-400 font-mono text-xs">
+                      <td className="p-4 text-sm text-muted-foreground font-mono">
                         {formatUsd(minSalary)} – {formatUsd(maxSalary)}
                       </td>
                     </tr>

@@ -288,6 +288,21 @@ describe('Employee API Endpoints', () => {
       }
     });
 
+    it('supports search by full name (first and last name)', async () => {
+      const res = await request(app)
+        .get('/api/v1/employees?search=Alice%20Smith')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(res.status).toBe(200);
+      const body = res.body as ApiResponse<TestEmployee[]>;
+      const employees = body.data;
+      expect(employees).toBeDefined();
+      if (employees) {
+        expect(employees).toHaveLength(1);
+        expect(employees[0].id).toBe(emp1Id);
+      }
+    });
+
     it('supports search by employee no', async () => {
       const res = await request(app)
         .get('/api/v1/employees?search=EMP-003')

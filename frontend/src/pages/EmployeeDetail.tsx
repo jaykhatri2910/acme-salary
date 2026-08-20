@@ -84,19 +84,19 @@ export const EmployeeDetail: React.FC = () => {
         <div className="grid gap-6 md:grid-cols-2 animate-pulse">
           <Card className="border-border bg-card">
             <div className="p-6 space-y-4">
-              <div className="h-6 w-1/3 bg-slate-800 rounded" />
+              <div className="h-6 w-1/3 bg-muted rounded" />
               <div className="space-y-2">
-                <div className="h-4 w-2/3 bg-slate-800 rounded" />
-                <div className="h-4 w-1/2 bg-slate-800 rounded" />
+                <div className="h-4 w-2/3 bg-muted rounded" />
+                <div className="h-4 w-1/2 bg-muted rounded" />
               </div>
             </div>
           </Card>
           <Card className="border-border bg-card">
             <div className="p-6 space-y-4">
-              <div className="h-6 w-1/3 bg-slate-800 rounded" />
+              <div className="h-6 w-1/3 bg-muted rounded" />
               <div className="space-y-2">
-                <div className="h-4 w-2/3 bg-slate-800 rounded" />
-                <div className="h-4 w-1/2 bg-slate-800 rounded" />
+                <div className="h-4 w-2/3 bg-muted rounded" />
+                <div className="h-4 w-1/2 bg-muted rounded" />
               </div>
             </div>
           </Card>
@@ -105,7 +105,7 @@ export const EmployeeDetail: React.FC = () => {
         <>
           {/* ── Profile + Current Compensation ── */}
           <div className="grid gap-6 md:grid-cols-2">
-            {/* Employee Information Card — unchanged */}
+            {/* Employee Information Card */}
             <Card className="border-border bg-card text-left">
               <CardHeader className="border-b border-border pb-4">
                 <CardTitle className="flex items-center space-x-2 text-lg">
@@ -117,13 +117,13 @@ export const EmployeeDetail: React.FC = () => {
                 <div className="flex justify-between items-start">
                   <div>
                     <h2 className="text-xl font-bold text-foreground">{employee.fullName}</h2>
-                    <p className="text-sm font-mono text-slate-400 mt-0.5">{employee.employeeNo}</p>
+                    <p className="text-sm font-mono text-muted-foreground mt-0.5">{employee.employeeNo}</p>
                   </div>
                   <span
                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase ${
                       employee.employmentStatus === 'active'
-                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/25'
-                        : 'bg-rose-500/10 text-rose-400 border border-rose-500/25'
+                        ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/25'
+                        : 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/25'
                     }`}
                   >
                     {employee.employmentStatus}
@@ -133,18 +133,18 @@ export const EmployeeDetail: React.FC = () => {
                 <div className="border-t border-border pt-4 grid gap-3 text-sm">
                   <div className="flex items-center space-x-3">
                     <Mail className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-slate-400 w-24">Email:</span>
-                    <span className="text-slate-200">{employee.email}</span>
+                    <span className="text-muted-foreground w-24">Email:</span>
+                    <span className="text-foreground">{employee.email}</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <Briefcase className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-slate-400 w-24">Department:</span>
-                    <span className="text-slate-200 font-semibold">{employee.department.name}</span>
+                    <span className="text-muted-foreground w-24">Department:</span>
+                    <span className="text-foreground font-semibold">{employee.department.name}</span>
                   </div>
                   <div className="flex items-center space-x-3">
                     <FileText className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-slate-400 w-24">Country:</span>
-                    <span className="text-slate-200 font-semibold">
+                    <span className="text-muted-foreground w-24">Country:</span>
+                    <span className="text-foreground font-semibold">
                       {employee.country.name} ({employee.country.code})
                     </span>
                   </div>
@@ -152,7 +152,7 @@ export const EmployeeDetail: React.FC = () => {
               </CardContent>
             </Card>
 
-            {/* Current Salary Card — adds "Record Compensation Change" button to header */}
+            {/* Current Salary Card */}
             <Card className="border-border bg-card text-left">
               <CardHeader className="border-b border-border pb-4">
                 <div className="flex items-center justify-between">
@@ -177,7 +177,7 @@ export const EmployeeDetail: React.FC = () => {
                       <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                         Current Salary
                       </span>
-                      <h2 className="text-3xl font-extrabold text-slate-100 mt-1">
+                      <h2 className="text-3xl font-extrabold text-foreground mt-1">
                         {formatCurrency(employee.currentSalary.amount, employee.currentSalary.currencyCode)}
                         <span className="text-sm font-normal text-muted-foreground ml-1">
                           / {employee.currentSalary.payFrequency}
@@ -188,13 +188,13 @@ export const EmployeeDetail: React.FC = () => {
                     <div className="border-t border-border pt-4 grid grid-cols-2 gap-4 text-sm">
                       <div>
                         <span className="text-xs text-muted-foreground block">Grade</span>
-                        <span className="text-slate-200 font-semibold font-mono">
+                        <span className="text-foreground font-semibold font-mono">
                           {employee.currentSalary.grade || '—'}
                         </span>
                       </div>
                       <div>
                         <span className="text-xs text-muted-foreground block">Pay Band</span>
-                        <span className="text-slate-200 font-semibold font-mono">
+                        <span className="text-foreground font-semibold font-mono">
                           {employee.currentSalary.band || '—'}
                         </span>
                       </div>
@@ -203,7 +203,7 @@ export const EmployeeDetail: React.FC = () => {
                           <Calendar className="h-3.5 w-3.5 mr-1" />
                           <span>Effective Date</span>
                         </span>
-                        <span className="text-slate-200 font-semibold mt-0.5 block">
+                        <span className="text-foreground font-semibold mt-0.5 block">
                           {formatDate(employee.currentSalary.effectiveDate)}
                         </span>
                       </div>
@@ -211,7 +211,7 @@ export const EmployeeDetail: React.FC = () => {
                   </div>
                 ) : (
                   <div className="flex flex-col items-center justify-center p-8 space-y-2 text-center text-muted-foreground h-full min-h-[150px]">
-                    <AlertCircle className="h-8 w-8 text-slate-700" />
+                    <AlertCircle className="h-8 w-8 text-muted-foreground/60" />
                     <span className="font-semibold text-sm">No active salary record</span>
                     <p className="text-xs max-w-xs">
                       This employee does not have any salary audit records assigned.

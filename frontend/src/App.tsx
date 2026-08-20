@@ -10,6 +10,7 @@ import { Employees } from './pages/Employees';
 import { EmployeeDetail } from './pages/EmployeeDetail';
 import { Dashboard } from './pages/Dashboard';
 import { Users, LogOut, LayoutDashboard } from 'lucide-react';
+import { ThemeToggle } from './components/ThemeToggle';
 
 const queryClient = new QueryClient();
 
@@ -35,13 +36,13 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground">
-      {/* Premium Header */}
-      <header className="sticky top-0 z-50 w-full border-b border-border bg-slate-950/80 backdrop-blur-md">
+    <div className="flex min-h-screen flex-col bg-background text-foreground transition-colors duration-200">
+      {/* Premium Adaptive Header */}
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-card/80 backdrop-blur-md transition-colors duration-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center space-x-8">
             <Link to="/" className="flex items-center space-x-2 outline-none">
-              <span className="text-lg font-bold bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">
+              <span className="text-lg font-bold bg-gradient-to-r from-violet-600 to-indigo-600 dark:from-violet-400 dark:to-indigo-400 bg-clip-text text-transparent">
                 ACME Salary
               </span>
             </Link>
@@ -60,8 +61,8 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
                     to={item.path}
                     className={`inline-flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring ${
                       isActive
-                        ? 'bg-slate-900 text-slate-100'
-                        : 'text-muted-foreground hover:bg-slate-900/50 hover:text-slate-200'
+                        ? 'bg-secondary text-foreground font-semibold shadow-xs'
+                        : 'text-muted-foreground hover:bg-secondary/60 hover:text-foreground'
                     }`}
                   >
                     <Icon className="h-4 w-4" />
@@ -74,15 +75,20 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
           <div className="flex items-center space-x-4">
             <div className="hidden sm:flex flex-col text-right">
-              <span className="text-sm font-semibold text-slate-200">{user?.name}</span>
+              <span className="text-sm font-semibold text-foreground">{user?.name}</span>
               <span className="text-xs text-muted-foreground capitalize">
                 {user?.role.replace('_', ' ')}
               </span>
             </div>
+            
+            {/* Theme Toggle Button */}
+            <ThemeToggle />
+
             <button
               onClick={handleLogout}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-input bg-transparent hover:bg-rose-950/20 hover:text-rose-400 transition-colors outline-none cursor-pointer"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-input bg-card/60 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 transition-colors outline-none cursor-pointer shadow-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               aria-label="Logout"
+              title="Logout"
             >
               <LogOut className="h-4 w-4" />
             </button>

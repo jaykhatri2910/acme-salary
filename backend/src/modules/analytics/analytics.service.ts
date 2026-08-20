@@ -349,9 +349,10 @@ export async function getExportChunk(
   }
 
   if (filters.search) {
-    values.push(`%${filters.search}%`);
+    const trimmed = filters.search.trim();
+    values.push(`%${trimmed}%`);
     conditions.push(
-      `(e.first_name ILIKE $${values.length} OR e.last_name ILIKE $${values.length} OR e.employee_no ILIKE $${values.length})`,
+      `(e.first_name ILIKE $${values.length} OR e.last_name ILIKE $${values.length} OR (e.first_name || ' ' || e.last_name) ILIKE $${values.length} OR (e.last_name || ' ' || e.first_name) ILIKE $${values.length} OR e.employee_no ILIKE $${values.length})`,
     );
   }
 

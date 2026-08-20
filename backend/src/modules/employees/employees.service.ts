@@ -147,9 +147,10 @@ export async function getEmployees(
   }
 
   if (params.search) {
-    values.push(`%${params.search}%`);
+    const trimmed = params.search.trim();
+    values.push(`%${trimmed}%`);
     conditions.push(
-      `(e.first_name ILIKE $${values.length} OR e.last_name ILIKE $${values.length} OR e.employee_no ILIKE $${values.length})`,
+      `(e.first_name ILIKE $${values.length} OR e.last_name ILIKE $${values.length} OR (e.first_name || ' ' || e.last_name) ILIKE $${values.length} OR (e.last_name || ' ' || e.first_name) ILIKE $${values.length} OR e.employee_no ILIKE $${values.length})`,
     );
   }
 

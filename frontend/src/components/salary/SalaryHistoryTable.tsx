@@ -80,9 +80,9 @@ export const SalaryHistoryTable: React.FC<SalaryHistoryTableProps> = ({ employee
           <div className="divide-y divide-border animate-pulse">
             {[1, 2, 3].map((i) => (
               <div key={i} className="px-6 py-4 space-y-2">
-                <div className="h-4 w-1/4 bg-slate-800 rounded" />
-                <div className="h-5 w-1/2 bg-slate-800 rounded" />
-                <div className="h-3 w-1/3 bg-slate-800 rounded" />
+                <div className="h-4 w-1/4 bg-muted rounded" />
+                <div className="h-5 w-1/2 bg-muted rounded" />
+                <div className="h-3 w-1/3 bg-muted rounded" />
               </div>
             ))}
           </div>
@@ -104,7 +104,7 @@ export const SalaryHistoryTable: React.FC<SalaryHistoryTableProps> = ({ employee
         {/* Empty state */}
         {!isLoading && !isError && entries.length === 0 && (
           <div className="flex flex-col items-center justify-center py-12 space-y-2 text-center text-muted-foreground">
-            <Lock className="h-8 w-8 text-slate-700" />
+            <Lock className="h-8 w-8 text-muted-foreground/60" />
             <p className="font-semibold text-sm">No salary history on record</p>
             <p className="text-xs max-w-xs">
               Compensation records will appear here once a salary is assigned to this employee.
@@ -116,47 +116,47 @@ export const SalaryHistoryTable: React.FC<SalaryHistoryTableProps> = ({ employee
         {!isLoading && !isError && entries.length > 0 && (
           <div className={`divide-y divide-border ${isFetching ? 'opacity-60' : ''} transition-opacity`}>
             {entries.map((entry) => (
-              <div key={entry.id} className="px-6 py-4 space-y-2">
+              <div key={entry.id} className="px-6 py-4 space-y-2 text-left">
                 {/* Top row: date + change direction */}
                 <div className="flex flex-wrap items-center gap-2">
                   {/* Effective date */}
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-slate-800 text-slate-300 text-xs font-mono">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-secondary text-secondary-foreground text-xs font-mono border border-border">
                     {formatDate(entry.effectiveDate)}
                   </span>
 
                   {/* old → new amount (using the record's currencyCode, never hardcoded) */}
                   <div className="flex items-center gap-1.5 text-sm font-semibold">
-                    <span className="text-slate-500">
+                    <span className="text-muted-foreground">
                       {entry.oldAmount !== null
                         ? formatAmount(entry.oldAmount, entry.currencyCode)
                         : 'Initial'}
                     </span>
-                    <ArrowRight className="h-3.5 w-3.5 text-slate-600" />
-                    <span className="text-emerald-400">
+                    <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/60" />
+                    <span className="text-emerald-600 dark:text-emerald-400">
                       {formatAmount(entry.newAmount, entry.currencyCode)}
                     </span>
                   </div>
 
                   {/* Frequency badge */}
-                  <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 text-xs font-medium capitalize">
+                  <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 text-xs font-medium capitalize">
                     {entry.payFrequency}
                   </span>
 
                   {/* Grade / Band chips */}
                   {entry.grade && (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-slate-700 text-slate-300 text-xs font-mono">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-muted text-foreground text-xs font-mono border border-border">
                       {entry.grade}
                     </span>
                   )}
                   {entry.band && (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-slate-700 text-slate-300 text-xs">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-md bg-muted text-foreground text-xs border border-border">
                       {entry.band}
                     </span>
                   )}
                 </div>
 
                 {/* Reason */}
-                <p className="text-sm text-slate-200">{entry.reason}</p>
+                <p className="text-sm text-foreground">{entry.reason}</p>
 
                 {/* Notes (if present) */}
                 {entry.notes && (

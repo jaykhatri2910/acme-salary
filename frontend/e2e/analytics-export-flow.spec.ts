@@ -24,9 +24,9 @@ test.describe('QA-2: Executive Analytics & Filtered CSV Export Flow', () => {
     await expect(page.getByText('Pay Band Distribution')).toBeVisible();
     await expect(page.getByText('Regional Compensation Breakdown')).toBeVisible();
 
-    // 5. Test Department filter
-    const deptSelect = page.locator('select[aria-label="Filter by department"]');
-    await deptSelect.selectOption({ index: 1 }); // Select first department
+    // 5. Test Department filter (Custom Dropdown)
+    await page.getByRole('button', { name: /all departments/i }).click();
+    await page.getByRole('option').nth(1).click(); // Select first department option
 
     // Reset filters button should appear
     const resetBtn = page.getByRole('button', { name: /reset filters/i });
