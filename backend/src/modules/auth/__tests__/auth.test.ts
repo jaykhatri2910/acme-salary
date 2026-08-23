@@ -45,7 +45,7 @@ describe('Auth API and Middleware', () => {
       expect(cookies).toBeDefined();
       expect(cookies[0]).toMatch(/refreshToken=/);
       expect(cookies[0]).toMatch(/HttpOnly/);
-      expect(cookies[0]).toMatch(/SameSite=Strict/);
+      expect(cookies[0]).toMatch(/SameSite=None/);
     });
 
     it('returns 401 for an invalid email', async () => {

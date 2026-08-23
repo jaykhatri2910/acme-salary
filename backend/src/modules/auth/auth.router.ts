@@ -22,7 +22,7 @@ const isProduction = env.NODE_ENV === 'production';
 const getCookieOptions = () => ({
   httpOnly: true,
   secure: isProduction, // HTTPS only in production
-  sameSite: 'strict' as const,
+  sameSite: 'none' as const,
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 });
 
@@ -112,7 +112,7 @@ router.post('/logout', async (req, res, next) => {
     res.clearCookie('refreshToken', {
       httpOnly: true,
       secure: isProduction,
-      sameSite: 'strict',
+      sameSite: 'none',
     });
 
     res.status(200).json({
