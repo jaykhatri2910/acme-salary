@@ -125,6 +125,12 @@ export const Login: React.FC = () => {
             <Button type="submit" className="w-full mt-2" isLoading={isSubmitting}>
               Sign In
             </Button>
+            
+            {isSubmitting && (
+              <p className="text-xs text-center text-muted-foreground mt-4 animate-pulse">
+                Waking up the server... This might take up to 50 seconds on the free tier.
+              </p>
+            )}
           </form>
         </CardContent>
       </Card>
