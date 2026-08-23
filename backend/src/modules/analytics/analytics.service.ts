@@ -50,6 +50,7 @@ export interface AnalyticsSummary {
   byDepartment: DepartmentBreakdown[];
   byCountry: CountryBreakdown[];
   payBandDistribution: PayBandDistribution[];
+  currentExchangeRates: { currency: string; rateToUsd: number }[];
 }
 
 export interface ExportFilters {
@@ -205,6 +206,19 @@ export async function getAnalyticsSummary(
       FROM employee_salaries
       GROUP BY band
       ORDER BY band NULLS LAST
+    ),
+
+    exchange_rates_summary AS (
+      SELECT
+        from_currency AS currency,
+        rate AS rate_to_usd,
+        ROW_NUMBER() OVER (PARTITION BY from_currency ORDER BY effective_date DESC) as rn
+      FROM exchange_rates
+      WHERE to_currency = 'USD'
+    ),
+
+    latest_rates AS (
+      SELECT currency, rate_to_usd FROM exchange_rates_summary WHERE rn = 1
     )
 
     SELECT
@@ -235,7 +249,15 @@ export async function getAnalyticsSummary(
           FROM band_stats
         ),
         '[]'::json
-      ) AS pay_band_distribution
+      ) AS pay_band_distribution,
+
+      COALESCE(
+        (
+          SELECT json_agg(latest_rates)
+          FROM latest_rates
+        ),
+        '[]'::json
+      ) AS current_exchange_rates
   `;
 
   const result = await query<{
@@ -270,6 +292,10 @@ export async function getAnalyticsSummary(
       band: string | null;
       headcount: number;
     }>;
+    current_exchange_rates: Array<{
+      currency: string;
+      rate_to_usd: string;
+    }>;
   }>(sql, values);
 
   const row = result.rows[0];
@@ -285,6 +311,7 @@ export async function getAnalyticsSummary(
       byDepartment: [],
       byCountry: [],
       payBandDistribution: [],
+      currentExchangeRates: [],
     };
   }
 
@@ -318,6 +345,10 @@ export async function getAnalyticsSummary(
     payBandDistribution: row.pay_band_distribution.map((item) => ({
       band: item.band,
       headcount: item.headcount,
+    })),
+    currentExchangeRates: row.current_exchange_rates.map((item) => ({
+      currency: item.currency,
+      rateToUsd: Number(item.rate_to_usd),
     })),
   };
 }

@@ -127,6 +127,19 @@ export const AnalyticsSummaryCards: React.FC<AnalyticsSummaryCardsProps> = ({
           </Card>
         );
       })}
+      
+      {/* Exchange Rates Display */}
+      {summary?.currentExchangeRates && summary.currentExchangeRates.length > 0 && (
+        <div className="col-span-1 sm:col-span-2 lg:col-span-5 text-xs text-muted-foreground text-right mt-2">
+          <span className="font-semibold">Exchange Rates:</span>{' '}
+          {summary.currentExchangeRates.map((rate, idx) => (
+            <span key={rate.currency}>
+              1 USD = {Number((1 / rate.rateToUsd).toFixed(2))} {rate.currency}
+              {idx < summary.currentExchangeRates.length - 1 ? ' | ' : ''}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

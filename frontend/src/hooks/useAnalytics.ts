@@ -42,6 +42,7 @@ export interface AnalyticsSummary {
   byDepartment: DepartmentBreakdown[];
   byCountry: CountryBreakdown[];
   payBandDistribution: PayBandDistribution[];
+  currentExchangeRates: { currency: string; rateToUsd: number }[];
 }
 
 export interface AnalyticsSummaryResponse {
