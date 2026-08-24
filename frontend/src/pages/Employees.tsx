@@ -126,7 +126,6 @@ export const Employees: React.FC = () => {
             <div className="relative lg:col-span-1">
               <Search className="absolute left-2.5 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                key={search}
                 placeholder="Search name or ID..."
                 className="pl-9 h-9"
                 value={searchInput}
