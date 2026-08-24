@@ -13,6 +13,7 @@ const mockSummary: AnalyticsSummary = {
   byDepartment: [],
   byCountry: [],
   payBandDistribution: [],
+  currentExchangeRates: [],
 };
 
 describe('AnalyticsSummaryCards component', () => {
@@ -68,6 +69,7 @@ describe('AnalyticsSummaryCards component', () => {
       byDepartment: [],
       byCountry: [],
       payBandDistribution: [],
+      currentExchangeRates: [],
     };
 
     render(<AnalyticsSummaryCards summary={zeroSummary} />);
