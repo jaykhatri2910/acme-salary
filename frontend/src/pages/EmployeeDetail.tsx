@@ -231,6 +231,7 @@ export const EmployeeDetail: React.FC = () => {
             onClose={() => setIsModalOpen(false)}
             employeeId={id}
             employeeName={employee.fullName}
+            defaultCurrency={employee.currentSalary?.currencyCode}
           />
         </>
       ) : null}
